@@ -45,7 +45,7 @@ def problems(text):
 
 
 def emit(path):
-    """Write JOKE to `path` after it clears the gate."""
+    """Write JOKE to `path` after it clears the gate, then read it back."""
     bad = problems(JOKE)
     if bad:
         print("refusing to write entry: " + "; ".join(bad), file=sys.stderr)
@@ -54,6 +54,10 @@ def emit(path):
     if target.parent != pathlib.Path("."):
         target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(JOKE, encoding="utf-8")
+    written = target.read_text(encoding="utf-8")
+    if written != JOKE:
+        print("wrote %r but read back %r" % (JOKE, written), file=sys.stderr)
+        return 1
     return 0
 
 
